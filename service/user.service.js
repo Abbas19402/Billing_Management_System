@@ -2,7 +2,6 @@ const User = require('../models/user.model');
 const Invoice = require('../models/invoice.model');
 const Client = require('../models/client.model');
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 
 const addUser = async({ name, email, password }) => {
     try{
@@ -32,7 +31,7 @@ const addUser = async({ name, email, password }) => {
 const addInvoiceOrClients = async({ addType, payload }) => {
     try{
         if (addType === 'invoice') {
-            const existingClient = await Client.findOne({ _id: payload.clientId });
+            const existingClient = await Client.findOne({ email: payload.clientEmail });
             if( !existingClient ) {
                 return {
                     success: false,
@@ -141,9 +140,28 @@ const deleteInvoiceOrClient = async({ deleteType, payloadId }) => {
     }
 }
 
+const getInvoiceOrClients = async({ getType, uid }) => {
+    const clients = await Client.find({ associatedWith: uid });
+    if(getType == 'invoice') {
+        const allInvoices = await Invoice.find();
+        return {
+            success: true,
+            message: 'fetched all invoices!',
+            data: allInvoices
+        }
+    } else {
+        return {
+            success: true,
+            message: 'fetched all clients!',
+            data: clients
+        }
+    }
+}
+
 module.exports = { 
     addUser, 
     addInvoiceOrClients, 
     editInvoiceOrClients, 
-    deleteInvoiceOrClient 
+    deleteInvoiceOrClient,
+    getInvoiceOrClients
 };

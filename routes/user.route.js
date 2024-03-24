@@ -10,5 +10,7 @@ router.post('/update-client', userController.editInvoiceOrClient);
 router.post('/update-invoice', userController.editInvoiceOrClient);
 router.post('/delete-client', userController.deleteInvoiceOrClient);
 router.post('/delete-invoice', userController.deleteInvoiceOrClient);
+router.get('/invoices',userController.getInvoiceOrClient),
+router.get('/clients',userController.getInvoiceOrClient)
 
 module.exports = router;

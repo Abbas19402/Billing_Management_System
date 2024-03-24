@@ -56,9 +56,27 @@ const deleteInvoiceOrClient = async(req,res) => {
     }
 }
 
+const getInvoiceOrClient = async(req,res) => {
+    try {
+        const response = await userService.getInvoiceOrClients(req.body);
+        if(response.success) {
+            res.status(200).json({
+                success: response.success,
+                message: response.message,
+                data: response.data
+            })
+        }
+    } catch (error) {
+        res.status(400).json({
+            message: "Error getting invoices or clients!!"
+        })
+    }
+}
+
 module.exports = {
     addNewUser,
     addInvoiceOrClient,
     editInvoiceOrClient,
-    deleteInvoiceOrClient
+    deleteInvoiceOrClient,
+    getInvoiceOrClient
 };
