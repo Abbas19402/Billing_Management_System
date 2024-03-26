@@ -34,14 +34,14 @@ const InvoicePage = () => {
                     updateOnTabChange={updateOnChange}
                 />
             </div>
-            <div className="my-5 w-full overflow-x-hidden min-h-full">
+            <div className="my-5 w-full overflow-x-auto min-h-full">
                 {activeTab == Constants.default.tabs.invoice ? 
                     <Table.invoice 
                         data={invoices} 
                         setInvoices={setInvoices} 
                         invoices={invoices}
                         updateOnChange={updateOnChange}
-                    /> : <Forms.invoice />}
+                    /> : <Forms.invoice setActiveTab={setActiveTab} update={updateOnChange}/>}
             </div> 
         </div>
     )

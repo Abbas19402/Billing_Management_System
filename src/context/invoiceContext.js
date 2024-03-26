@@ -12,7 +12,7 @@ const base_url = 'https://billing-management-server.vercel.app/api';
 
 const InvoiceProvider = ({ children }) => {
     const get = async() => {
-        const response = await axios.get(`${base_url}/user/invoices`)
+        const response = await services.invoice.getInvoices()
         if(response.status == 200) {
             return response.data.data
         }

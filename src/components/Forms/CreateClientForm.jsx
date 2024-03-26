@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import useRequest from '../../hooks/useRequest'
 
-const CreateClientForm = () => {
+const CreateClientForm = ({ setActiveTab, update }) => {
     const request = useRequest();
     const date = new Date();
 
@@ -19,7 +19,7 @@ const CreateClientForm = () => {
             values[pair[0]] = pair[1];
         }
         const clientPayload = {
-            associatedWith: request.auth.user?.id,
+            associatedWith: JSON.parse(localStorage.getItem('user')).id,
             name: values.name,
             email: values.email,
             address: values.address,
@@ -27,13 +27,16 @@ const CreateClientForm = () => {
         };
 
         const res = await request.client.create(clientPayload);
-        if(!res.success) {
+        if(res == {} || typeof res == 'undefined') {
             setError({
                 status: true,
                 message: res.message
             })
+        } else if(res) {
+            setActiveTab('allClients')
+            update()
+            e.target.reset()
         }
-        e.target.reset()
     }
     return (
         <div className='w-full h-screen p-4'>

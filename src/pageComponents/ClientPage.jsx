@@ -34,7 +34,7 @@ const ClientPage = () => {
                     updateOnTabChange={fetchClients}
                 />
             </div>
-            <div className="w-full flex justify-end">
+            {activeTab == 'allClients' && <div className="w-full flex justify-end">
                 <button
                     onClick={() => {
                         Utility.export(clients, 'Clients')
@@ -43,13 +43,13 @@ const ClientPage = () => {
                 >
                     Export to CSV
                 </button>
-            </div>
+            </div>}
             <div className="my-3 w-full overflow-x-auto min-h-full">
                 {activeTab == Constants.default.tabs.client ? <Table.client
                     clients={clients} 
                     setClients={setClients}
                     updateComponent={fetchClients}
-                /> : <Forms.client />}
+                /> : <Forms.client setActiveTab={setActiveTab} update={fetchClients}/>}
             </div>
         </div>
     )

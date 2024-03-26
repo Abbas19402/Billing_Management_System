@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import useRequest from '../../hooks/useRequest'
 
-const CreateInvoiceForm = () => {
+const CreateInvoiceForm = ({ setActiveTab, update }) => {
     const request = useRequest();
     const date = new Date();
 
@@ -26,14 +26,16 @@ const CreateInvoiceForm = () => {
         }
 
         const res = await request.invoice.create(createInvoicePayload)
-        if(!res.success) {
+        if(res == {} || typeof res == 'undefined') {
             setError({
                 status: true,
                 message: res.message
             })
+        } else if(res) {
+            setActiveTab('allInvoice')
+            update()
+            e.target.reset()
         }
-
-        e.target.reset()
     }
     return (
         <div className='w-full h-screen p-4'>
