@@ -11,7 +11,7 @@ const AuthContext = createContext({
   setIsLoggedIn: () => {},
 });
 
-const base_url = "http://localhost:5000/api";
+const base_url = "https://billing-management-server.vercel.app/api";
 
 const AuthProvider = ({ children }) => {
   const router = useRouter();
@@ -47,8 +47,7 @@ const AuthProvider = ({ children }) => {
     router.push('/')
   };
 
-  const value = { 
-    user: JSON.parse(localStorage.getItem('user')), 
+  const value = {
     isLoggedIn, 
     login, 
     logout 

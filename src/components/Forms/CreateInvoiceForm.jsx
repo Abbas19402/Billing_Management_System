@@ -12,30 +12,27 @@ const CreateInvoiceForm = () => {
 
     const createInvoice = async(e) => {
         e.preventDefault();
+
         let form = new FormData(e.currentTarget);
         let values = {};
-
         for(var pair of form.entries()) {
             values[pair[0]] = pair[1];
         }
-        console.log({
+        
+        const createInvoicePayload = {
             clientEmail: values.email,
             amount: parseInt(values.amount),
-            date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
-        });
+            date: `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+        }
 
-        const res = await request.invoice.create({
-            clientEmail: values.email,
-            amount: parseInt(values.amount),
-            date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
-        })
-        console.log(res)
+        const res = await request.invoice.create(createInvoicePayload)
         if(!res.success) {
             setError({
                 status: true,
                 message: res.message
             })
         }
+
         e.target.reset()
     }
     return (

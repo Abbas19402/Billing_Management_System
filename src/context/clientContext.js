@@ -1,18 +1,16 @@
 "use client";
 
 import { createContext } from "react";
-import axios from 'axios';
+import services from '../Services'
 
 const ClientContext = createContext({
     clients: []
 });
-const base_url = 'http://localhost:5000/api';
 
 const ClientProvider = ({ children }) => {
     const get = async() => {
-        const response = await axios.get(`${base_url}/user/clients`);
+        const response = await services.client.getClients()
         if(response.status == 200) {
-            // localStorage.setItem('clients',JSON.stringify(response.data.data));
             return response.data.data
         } else {
             return {
@@ -24,14 +22,7 @@ const ClientProvider = ({ children }) => {
     }
 
     const create = async(newClient) => {
-        const response = await axios.request({
-            method: 'POST',
-            url: `${base_url}/user/create-client`,
-            data: {
-                addType: 'client',
-                payload: newClient
-            }
-        })
+        const response = await services.client.createClient(newClient)
         if(response.status = 200) {
             return {
                 success: true,
@@ -55,21 +46,14 @@ const ClientProvider = ({ children }) => {
         totalAmount, 
         id 
     }) => {
-        const response = await axios.request({
-            method: 'POST',
-            url: `${base_url}/user/update-client`,
-            data: {
-                editType: "",
-                payload: {
-                    associatedWith: associatedWith,
-                    name: name,
-                    email: email,
-                    address: address,
-                    totalAmount: totalAmount
-                },
-                payloadId: id
-            }
-        })
+        const response = await services.client.editClient({ 
+            associatedWith, 
+            name, 
+            email, 
+            address, 
+            totalAmount, 
+            id 
+        });
 
         if(response.status == 200) {
             return{
@@ -85,14 +69,7 @@ const ClientProvider = ({ children }) => {
     }
 
     const remove = async({ id }) => {
-        const response = await axios.request({
-            method: "POST",
-            url: `${base_url}/user/delete-client`,
-            data: {
-                deleteType: "client",
-                payloadId: id
-            }
-        })
+        const response = await services.client.deleteClient({ id });
 
         if(response.status == 200) {
             return {
@@ -112,8 +89,7 @@ const ClientProvider = ({ children }) => {
         get,
         create,
         edit,
-        remove,
-        clients: JSON.parse(localStorage.getItem('clients'))
+        remove
     };
 
     return (

@@ -12,21 +12,12 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
     })
 
     const deleteClient = async(clientObj) => {
-        console.log(clientObj)
         const deleteResponse = await request.client.remove({id: clientObj._id})
-        console.log(deleteResponse);
         setClients(clients.filter(item => item.email != clientObj.email))
         updateComponent()
     }
 
     const editClient = async(currentClient) => {
-        console.log({
-            name: editedData.name,
-            email: editedData.email,
-            address: editedData.address,
-            totalAmount: currentClient.totalAmount
-        })
-
         const editResponse = await request.client.edit({
             associatedWith: currentClient.associatedWith,
             name: editedData.name,
@@ -36,7 +27,6 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
             id: currentClient._id
         })
 
-        console.log(editResponse)
         setEditIndex(null)
         updateComponent()
     }

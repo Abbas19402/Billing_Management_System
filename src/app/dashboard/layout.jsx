@@ -5,13 +5,10 @@ import Sidebar from '../../components/Dashboard/Sidebar'
 import Header from '../../components/Dashboard/Header'
 import { sidebarItems } from '../../constants/Sidebar'
 
-
 const DashboardLayout = ({ children }) => {
-    
-      
     const [activeSection, setActiveSection] = useState(sidebarItems[0].key);
     return (
-        <div className="max-w-screen h-screen overflow-x-hidden flex flex-row justify-between items-start bg-white scroll-smooth">
+        <div className="max-w-screen h-screen overflow-x-hidden flex flex-row justify-between items-start bg-slate-50 scroll-smooth">
         <div className="max-h-screen">
             {/* Sidebar */}
             <Sidebar setActiveSection={setActiveSection} activeSection={activeSection}/>

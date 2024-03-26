@@ -18,7 +18,6 @@ const InvoicePage = () => {
     async function fetchInvoices() {
         let allInvoices = await request.invoice.get();
         setInvoices(allInvoices)
-        console.log(allInvoices)
     }
 
     const updateOnChange = () => {

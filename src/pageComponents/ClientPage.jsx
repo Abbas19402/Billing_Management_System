@@ -5,6 +5,8 @@ import Forms from "../components/Forms"
 
 import Constants from '../constants'
 
+import Utility from '../Util/convertToCSV'
+
 import useRequest from "../hooks/useRequest"
 
 const ClientPage = () => {
@@ -22,10 +24,6 @@ const ClientPage = () => {
         setClients(allClients)
     }
 
-    // const updateOnChange = () => {
-    //     fetchClients()
-    // }
-
     return (
         <div className='h-screen flex flex-col justify-start items-center p-4 overflow-hidden'>
             <div className="w-full sticky">
@@ -36,7 +34,17 @@ const ClientPage = () => {
                     updateOnTabChange={fetchClients}
                 />
             </div>
-            <div className="my-5 w-full overflow-x-auto min-h-full">
+            <div className="w-full flex justify-end">
+                <button
+                    onClick={() => {
+                        Utility.export(clients, 'Clients')
+                    }}
+                    className="mt-3 flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                >
+                    Export to CSV
+                </button>
+            </div>
+            <div className="my-3 w-full overflow-x-auto min-h-full">
                 {activeTab == Constants.default.tabs.client ? <Table.client
                     clients={clients} 
                     setClients={setClients}

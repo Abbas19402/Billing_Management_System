@@ -2,55 +2,31 @@
 
 import { createContext } from "react";
 import axios from 'axios';
+import services from "../Services";
 
 const InvoiceContext = createContext({
     invoices: []
 });
 
-const base_url = 'http://localhost:5000/api';
+const base_url = 'https://billing-management-server.vercel.app/api';
 
 const InvoiceProvider = ({ children }) => {
     const get = async() => {
         const response = await axios.get(`${base_url}/user/invoices`)
         if(response.status == 200) {
-            // localStorage.setItem('invoices',JSON.stringify(response.data.data));
             return response.data.data
         }
     }
 
     const create = async(invoiceData) => {
-        const response = await axios.request({
-            method: 'POST',
-            url: `${base_url}/user/create-invoice`,
-            data: {
-                addType: 'invoice',
-                payload: {
-                    email: invoiceData.clientEmail,
-                    amount: invoiceData.amount,
-                    date: invoiceData.date
-                }
-            }
-        })
+        const response = await services.invoice.createInvoice(invoiceData)
         if(response.status == 200) {
-            console.log({
-                response,
-                success: true,
-                message: response.data.message
-            })
             return response.data.data
         }
     }
 
     const edit = async(editedInvoiceData) => {
-        const response = await axios.request({
-            method: 'POST',
-            url: `${base_url}/user/update-invoice`,
-            data: {
-                editType: 'invoice',
-                payload: editedInvoiceData
-            }
-        })
-
+        const response = await services.invoice.editInvoice(editedInvoiceData)
         if(response.status == 200) {
             return {
                 success: true,
@@ -60,16 +36,7 @@ const InvoiceProvider = ({ children }) => {
     }
 
     const remove = async(invoice_id) => {
-        console.log("IID: ",invoice_id)
-        const response = await axios.request({
-            method: 'POST',
-            url: `${base_url}/user/delete-invoice`,
-            data: {
-                deleteType: 'invoice',
-                payloadId: invoice_id
-            }
-        })
-
+        const response = await services.invoice.deleteInvoice(invoice_id)
         if(response.status == 200) {
             return {
                 response,
@@ -83,8 +50,7 @@ const InvoiceProvider = ({ children }) => {
         create, 
         get, 
         edit, 
-        remove, 
-        invoices: JSON.parse(localStorage.getItem('invoices')) 
+        remove
     };
     return (
         <InvoiceContext.Provider value={value}>

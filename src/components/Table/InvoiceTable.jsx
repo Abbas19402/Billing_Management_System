@@ -2,7 +2,14 @@ import React, { useState } from 'react'
 import Icons from '../Icons'
 import useRequest from '../../hooks/useRequest';
 
-const InvoiceTable = ({ data, setInvoices, invoices, updateOnChange }) => {
+const InvoiceTable = ({ 
+    data, 
+    setInvoices, 
+    invoices, 
+    updateOnChange, 
+    disableEditing = false, 
+    disableDeleting = false 
+}) => {
     const request = useRequest();
 
     const [ editIndex, setEditIndex ] = useState(null);
@@ -22,29 +29,18 @@ const InvoiceTable = ({ data, setInvoices, invoices, updateOnChange }) => {
     }
 
     const deleteInvoice = async(invoiceObj) => {
-        console.log(invoiceObj)
-        const deleteResponse = await request.invoice.remove(invoiceObj._id)
-        console.log(deleteResponse);
+        await request.invoice.remove(invoiceObj._id)
         setInvoices(invoices.filter(item => item.number != invoiceObj.number))
         updateOnChange()
     }
 
     const editInvoice = async(currentInvoice) => {
-        console.log({
+        await request.invoice.edit({
             number: currentInvoice.number,
             clientEmail: editedData.email,
             amount: editedData.amount,
             date: currentInvoice.date
         })
-
-        const editResponse = await request.invoice.edit({
-            number: currentInvoice.number,
-            clientEmail: editedData.email,
-            amount: editedData.amount,
-            date: currentInvoice.date
-        })
-
-        console.log(editResponse)
         setEditIndex(null)
         updateOnChange()
     }
@@ -57,8 +53,8 @@ const InvoiceTable = ({ data, setInvoices, invoices, updateOnChange }) => {
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">Client Email</th>
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">Amount</th>
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">Date</th>
-                    <th scope="col" className="px-6 py-3 whitespace-nowrap">Edit</th>
-                    <th scope="col" className="px-6 py-3 whitespace-nowrap text-red-600">Delete</th>
+                    {!disableEditing && <th scope="col" className="px-6 py-3 whitespace-nowrap">Edit</th>}
+                    {!disableDeleting && <th scope="col" className="px-6 py-3 whitespace-nowrap text-red-600">Delete</th>}
                 </tr>
             </thead>
             <tbody>
@@ -97,7 +93,7 @@ const InvoiceTable = ({ data, setInvoices, invoices, updateOnChange }) => {
                             />
                         </td>
                         <td className="px-6 py-4">{formatDate(item.date)}</td>
-                        <td className="px-6 py-4 hover:cursor-pointer"> 
+                        {!disableEditing && <td className="px-6 py-4 hover:cursor-pointer"> 
                             {editIndex == index ? <Icons.tick onClick={() => editInvoice(item)} className="fill-green-500 h-5 w-5 mx-auto"/> : <Icons.edit 
                                 onClick={() => {
                                     setEditIndex(index)
@@ -109,10 +105,10 @@ const InvoiceTable = ({ data, setInvoices, invoices, updateOnChange }) => {
                                 className="fill-black hover:fill-blue-800/40 h-5 w-5 mx-auto"
                             />}
 
-                        </td>
-                        <td onClick={() => deleteInvoice(item)} className="px-6 py-4 hover:cursor-pointer">
+                        </td>}
+                        {!disableDeleting && <td onClick={() => deleteInvoice(item)} className="px-6 py-4 hover:cursor-pointer">
                             <Icons.delete className="fill-black hover:fill-red-600 h-5 w-5 mx-auto"/> 
-                        </td>
+                        </td>}
                     </tr>
                 ))}
             </tbody>
