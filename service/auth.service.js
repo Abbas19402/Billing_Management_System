@@ -28,8 +28,7 @@ const login = async({ email, password }) => {
             user: {
                 name: user.name,
                 email: user.email,
-                clients: associatedClients,
-                invoice: allInvoices 
+                id: user._id 
             }
         }
     } catch(error) {

@@ -31,7 +31,12 @@ const addUser = async({ name, email, password }) => {
 const addInvoiceOrClients = async({ addType, payload }) => {
     try{
         if (addType === 'invoice') {
-            const existingClient = await Client.findOne({ email: payload.clientEmail });
+            console.log(addType, payload);
+            const existingClient = await Client.findOne({ email: payload.email });
+            const allInvoices = await Invoice.find();
+
+            console.log(existingClient)
+
             if( !existingClient ) {
                 return {
                     success: false,
@@ -50,9 +55,23 @@ const addInvoiceOrClients = async({ addType, payload }) => {
                   },
                   $inc: { totalAmount: payload.amount }
                 }
-            );
+            )
+                .then(res => console.log("Updated client's response: ", res))
+                .catch(err => console.log("Update's error: ", err))
+            
+            console.log("New invoice to be added: ",{
+                number: allInvoices.length + 1,
+                amount: payload.amount,
+                date: payload.date,
+                clientEmail: payload.email
+            })
+            const newInvoice = new Invoice({
+                number: allInvoices.length + 1,
+                amount: payload.amount,
+                date: payload.date,
+                clientEmail: payload.email
+            });
 
-            const newInvoice = new Invoice(payload);
             await newInvoice.save();
 
             return {
@@ -69,8 +88,6 @@ const addInvoiceOrClients = async({ addType, payload }) => {
                 data: newClient
             }
         }
-
-        
     } catch(error) {
         return {
             success: false,
@@ -82,11 +99,10 @@ const addInvoiceOrClients = async({ addType, payload }) => {
 const editInvoiceOrClients = async({ editType, payload, payloadId }) => {
     try{
         if (editType === 'invoice') {
-            const client = await Client.findOne({ _id: payload.clientId });
+            const client = await Client.findOne({ email: payload.clientEmail });
             const existingInvoice = await Invoice.findOne({ number: payload.number });
 
             if( existingInvoice.amount != payload.amount ) {
-                console.log("Updated amount: ",payload.amount);
                 await Client.updateOne(
                     { _id: client._id },
                     { $set: {totalAmount: (client.totalAmount - existingInvoice.amount) + payload.amount} }
@@ -120,12 +136,12 @@ const deleteInvoiceOrClient = async({ deleteType, payloadId }) => {
                 { _id: existingInvoice.clientId },
                 { $inc: {totalAmount: -existingInvoice.amount} }
             );
-
             await Invoice.deleteOne({ _id: payloadId });
         } else {
-            const deletedCount = await Invoice.deleteMany({ clientId: payloadId });
-            console.log(`Deleted ${deletedCount.deletedCount} documents with clientId: ${payloadId}`);
-            await Client.deleteOne({ _id: payloadId });
+            console.log(payloadId)
+            await Client.deleteOne({ _id: payloadId })
+                .then(deleteRes => console.log("Deleted client: ",deleteRes))
+                .catch(deleteErr => console.log("Deleted error: ",deleteErr))
         }
 
         return {
@@ -140,28 +156,29 @@ const deleteInvoiceOrClient = async({ deleteType, payloadId }) => {
     }
 }
 
-const getInvoiceOrClients = async({ getType, uid }) => {
-    const clients = await Client.find({ associatedWith: uid });
-    if(getType == 'invoice') {
-        const allInvoices = await Invoice.find();
-        return {
-            success: true,
-            message: 'fetched all invoices!',
-            data: allInvoices
-        }
-    } else {
-        return {
-            success: true,
-            message: 'fetched all clients!',
-            data: clients
-        }
-    }
-}
+// const getInvoiceOrClients = async({ getType }) => {
+//     if(getType == 'invoice') {
+//         const allInvoices = await Invoice.find();
+//         console.log("Invoices fetched: ",allInvoices);
+//         return {
+//             success: true,
+//             message: 'fetched all invoices!',
+//             data: allInvoices
+//         }
+//     } else {
+//         const clients = await Client.find();
+//         return {
+//             success: true,
+//             message: 'fetched all clients!',
+//             data: clients
+//         }
+//     }
+// }
 
 module.exports = { 
     addUser, 
     addInvoiceOrClients, 
     editInvoiceOrClients, 
     deleteInvoiceOrClient,
-    getInvoiceOrClients
+    // getInvoiceOrClients
 };
