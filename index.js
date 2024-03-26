@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const config = require('./config');
 const routes = require('./routes')
@@ -12,7 +13,7 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://abbasdalal19402:E4q4VSiNIYwrhlp6@cluster0.w96ligs.mongodb.net/billing_management")
+mongoose.connect(config?.dbUri)
     .then(()=> {
         console.log("Connected to mongoDB")
     })
@@ -24,5 +25,5 @@ app.use('/api/user',routes.user);
 app.use('/api/auth',routes.auth);
 
 app.listen(config.port, ()=> {
-    console.log(`Server is running on pert: ${config.port}`)
+    console.log(`Server is running on port: ${config.port}`)
 })
