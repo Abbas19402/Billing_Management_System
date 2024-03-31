@@ -1,14 +1,21 @@
-import { useContext } from "react";
+import { createInvoices, deleteInvoices, editInvoices, getInvoices } from '../Services/Invoices/invoiceService'
 
-import { AuthContext } from "../context/authContext";
-import { InvoiceContext } from "../context/invoiceContext"; 
-import { ClientContext } from "../context/clientContext";
+import { getClient, createClient, deleteClient, editClient } from '../Services/Clients/clientService'
 
 const useRequest = () => {
     return {
-        auth: useContext(AuthContext),
-        invoice: useContext(InvoiceContext),
-        client: useContext(ClientContext)
+        invoice: {
+            get: () => getInvoices(),
+            create: invoiceData => createInvoices(invoiceData),
+            edit: editedInvoiceData => editInvoices(editedInvoiceData),
+            delete: invoice_id => deleteInvoices(invoice_id)
+        },
+        client: {
+            get: () => getClient(),
+            create: newClient => createClient(newClient),
+            edit: editClientData => editClient(editClientData),
+            delete: clientId => deleteClient(clientId)
+        }
     }
 }
 

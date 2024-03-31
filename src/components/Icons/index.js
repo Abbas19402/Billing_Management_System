@@ -1,4 +1,4 @@
-import { ClientIcon, DashboardIcon, DeleteIcon, EditIcon, InvoiceIcon, ReportIcon, Tick, LogoutIcon, ProfileIcon } from './general'
+import { ClientIcon, DashboardIcon, DeleteIcon, EditIcon, InvoiceIcon, ReportIcon, Tick, LogoutIcon, ProfileIcon, LoaderIcon } from './general'
 
 const Icons = {
     delete: DeleteIcon,
@@ -9,7 +9,8 @@ const Icons = {
     client: ClientIcon,
     report: ReportIcon,
     logout: LogoutIcon,
-    profile: ProfileIcon
+    profile: ProfileIcon,
+    loader: LoaderIcon
 }
 
 export default Icons

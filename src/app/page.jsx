@@ -3,9 +3,13 @@
 import { useRouter } from "next/navigation";
 import useRequest from "../hooks/useRequest"
 import { useState } from "react";
+import Icons from "../components/Icons";
+import useAuth from '../hooks/useAuth'
 
 export default function Home() {
   const router = useRouter();
+
+  const auth = useAuth();
   const request = useRequest();
 
   const [error, setError] = useState({
@@ -16,10 +20,13 @@ export default function Home() {
     email: "",
     password: ""
   });
+  const [loading, setLoading ] = useState(false)
 
   const userLogin = async() => {
+    setLoading(true)
     try {
-      await request.auth.login(input.email,input.password);
+      await auth.login(input.email,input.password)
+      setLoading(loading)
     } catch (error) {
       console.log(error);
       setError({
@@ -102,7 +109,9 @@ export default function Home() {
                 onClick={userLogin}
                 className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
               >
-                Sign in
+                {loading ? <div className="animate-spin">
+                  <Icons.loader className="w-5 h-5 fill-white"/>
+                </div>: <span>Sign In</span>}
               </button>
             </div>
           </div>

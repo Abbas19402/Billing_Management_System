@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { sidebarItems } from "../../../constants/Sidebar"
-import useRequest from '../../../hooks/useRequest'
 import { useRouter, usePathname } from 'next/navigation'
+
+import { sidebarItems } from "../../../constants/Sidebar"
+
+import useAuth from '../../../hooks/useAuth';
 import Icons from '../../Icons';
 
 const Sidebar = ({ setActiveSection, activeSection}) => {
+    const auth = useAuth();
     const router = useRouter();
     const pathname = usePathname();
-    const request = useRequest();
 
     const [ user, setUser ] = useState(null);
     const [ route, setRoute ] = useState(pathname.toString());
@@ -53,11 +55,11 @@ const Sidebar = ({ setActiveSection, activeSection}) => {
                             className={`w-full h-14 flex flex-row justify-start items-center rounded-lg ${activeSection == item.key ? 'font-bold text-gray-600' : 'font-medium text-gray-500'} p-2 gap-6 hover:cursor-pointer`}
                             onClick={()=> {
                                 setActiveSection(item.key)
-                                router.push(item.route)
+                                router.replace(item.route)
                             }}
                         >
                             {/* Icon */}
-                            <div className={`transition-all duration-300 flex justify-center items-center w-10 h-10 rounded-lg bg-white ${activeSection == item.key ? 'shadow-lg shadow-black/10 scale-110' : 'shadow-none'}`}>{item.icon}</div>
+                            <div className={`transition-all duration-300 flex justify-center items-center w-10 h-10 rounded-lg bg-white ${activeSection == item.key ? 'shadow-lg shadow-black/10 scale-110' : 'shadow-inner'}`}>{item.icon}</div>
 
                             {/* Sidebar Item name */}
                             <div className='text-md capitalize tracking-wider '>
@@ -70,7 +72,7 @@ const Sidebar = ({ setActiveSection, activeSection}) => {
 
             {/* Logout */}
             <div className="w-full p-2">
-                <div onClick={()=> request.auth.logout()} className="w-full h-16 flex flex-row justify-start items-center rounded-lg bg-white shadow-inner p-2 gap-6 hover:cursor-pointer hover:bg-slate-50">
+                <div onClick={()=> auth.logout()} className="w-full h-16 flex flex-row justify-start items-center rounded-lg bg-white shadow-inner p-2 gap-6 hover:cursor-pointer hover:bg-slate-50">
                     {/* Icon */}
                     <div className="flex justify-center items-center w-10 h-10 rounded-lg bg-red-200">
                         <Icons.logout className="w-5 h-5 fill-sky-900"/>
