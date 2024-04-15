@@ -21,13 +21,15 @@ const addInvoiceOrClient = async(req,res) => {
         const response = await userService.addInvoiceOrClients(req.body);    
         res.status(200).json(response);
         if(!response.success) {
-//            throw new Error(response.message);
-            res.status(400).json({
-                success: false,
-                message: "Error creating new invoice!"
-            })
+            console.log(response)
+            throw new Error(response.message);
+            // res.status(400).json({
+            //     success: false,
+            //     message: "Error creating new invoice!"
+            // })
         }
     } catch(err) {
+        console.log(err)
         res.status(400).json({
             message: err
         })

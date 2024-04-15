@@ -83,7 +83,7 @@ const addInvoiceOrClients = async({ addType, payload }) => {
     } catch(error) {
         return {
             success: false,
-            message: `Error while updating ${editType}. Error: ${error}`
+            message: `Error while updating ${addType}. Error: ${error}`
         }
     }
 }
