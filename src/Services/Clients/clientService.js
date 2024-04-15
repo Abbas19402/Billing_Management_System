@@ -3,32 +3,33 @@ import axios from 'axios'
 const base_url = "https://billing-management-server.vercel.app/api";
 
 export async function getClient() {
-    const response = await axios.get(`${base_url}/user/clients`)
+    const response = await axios.get(`${base_url}/user/clients`);
+    console.log(response);
     if(response.status == 200) {
-        return response.data.data
+        return response.data.data;
     } else {
-        alert("Error fetching clients")
+        alert("Error fetching clients");
     }
 }
 
 export async function createClient(newClient) {
-    const response = await axios.request({
-        method: 'POST',
-        url: `${base_url}/user/create-client`,
-        data: {
-            addType: 'client',
-            payload: newClient
-        }
-    })
-    if(response.status == 200) {
+    try {
+        const response = await axios.request({
+            method: 'POST',
+            url: `${base_url}/user/create-client`,
+            data: {
+                addType: 'client',
+                payload: newClient
+            }
+        })
         return {
             success: true,
             message: "Client created!",
             data: response.data.data
         }
-    } else {
-        alert("Error fetching clients")
-    }  
+    } catch (error) {
+        alert("Error creating clients")
+    }
 }
 
 export async function editClient({ 

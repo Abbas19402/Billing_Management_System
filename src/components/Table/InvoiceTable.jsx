@@ -13,6 +13,7 @@ const InvoiceTable = ({
     const request = useRequest();
 
     const [ editIndex, setEditIndex ] = useState(null);
+    const [ loading, setLoading ] = useState(false);
     const [ editedData, setEditedData ] = useState({
         amount: ""
     })
@@ -28,8 +29,10 @@ const InvoiceTable = ({
     }
 
     const deleteInvoice = async(invoiceObj) => {
-        await request.invoice.remove(invoiceObj._id)
+        setLoading(true)
+        await request.invoice.delete(invoiceObj._id)
         setInvoices(invoices.filter(item => item.number != invoiceObj.number))
+        setLoading(false)
         updateOnChange()
     }
 
@@ -99,7 +102,9 @@ const InvoiceTable = ({
 
                         </td>}
                         {!disableDeleting && <td onClick={() => deleteInvoice(item)} className="px-6 py-4 hover:cursor-pointer">
-                            <Icons.delete className="fill-black hover:fill-red-600 h-5 w-5 mx-auto"/> 
+                        {loading ? <div className="animate-spin">
+                            <Icons.loader className="w-5 h-5 fill-white"/>
+                            </div> : <Icons.delete className="fill-black hover:fill-red-600 h-5 w-5 mx-auto"/> }
                         </td>}
                     </tr>
                 ))}

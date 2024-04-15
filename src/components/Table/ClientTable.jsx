@@ -4,7 +4,8 @@ import useRequest from '../../hooks/useRequest';
 
 const ClientTable = ({ setClients, clients, updateComponent }) => {
     const request = useRequest();
-    const [ editIndex, setEditIndex ] = useState(null);
+    const [ activeIndex, setActiveIndex ] = useState(null);
+    const [ loading, setLoading ] = useState(false);
     const [ editedData, setEditedData ] = useState({
         name: "",
         email: "",
@@ -12,8 +13,11 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
     })
 
     const deleteClient = async(clientObj) => {
-        const deleteResponse = await request.client.remove({id: clientObj._id})
+        setLoading(true)
+        const deleteResponse = await request.client.delete({id: clientObj._id})
+        console.log(deleteResponse)
         setClients(clients.filter(item => item.email != clientObj.email))
+        setLoading(false)
         updateComponent()
     }
 
@@ -27,7 +31,7 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
             id: currentClient._id
         })
 
-        setEditIndex(null)
+        setActiveIndex(null)
         updateComponent()
     }
 
@@ -54,8 +58,8 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
                     <td className="px-6 py-4">
                         <input 
                             type="text" 
-                            disabled={editIndex != index} 
-                            value={editIndex != index ? item.name : editedData.name} 
+                            disabled={activeIndex != index} 
+                            value={activeIndex != index ? item.name : editedData.name} 
                             onChange={(event) => {
                                 setEditedData({
                                     name: event.target.value,
@@ -63,14 +67,14 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
                                     address: editedData.address
                                 })
                             }}
-                            className={`w-fit rounded-md text-center transition-all duration-300 ${editIndex == index? 'border-2 border-black bg-white/10 outline-1 outline-black scale-110 shadow-md' : 'border-0 bg-transparent outline-0'}`} 
+                            className={`w-fit rounded-md text-center transition-all duration-300 ${activeIndex == index? 'border-2 border-black bg-white/10 outline-1 outline-black scale-110 shadow-md' : 'border-0 bg-transparent outline-0'}`} 
                         />
                     </td>
                     <td className="px-6 py-4">
                         <input 
                             type="text" 
-                            disabled={editIndex != index} 
-                            value={editIndex != index ? item.email : editedData.email} 
+                            disabled={activeIndex != index} 
+                            value={activeIndex != index ? item.email : editedData.email} 
                             onChange={(event) => {
                                 setEditedData({
                                     email: event.target.value,
@@ -78,14 +82,14 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
                                     name: editedData.name
                                 })
                             }}
-                            className={`w-fit rounded-md text-center transition-all duration-300 ${editIndex == index? 'border-2 border-black bg-white/10 outline-1 outline-black scale-110 shadow-md' : 'border-0 bg-transparent outline-0'}`} 
+                            className={`w-fit rounded-md text-center transition-all duration-300 ${activeIndex == index? 'border-2 border-black bg-white/10 outline-1 outline-black scale-110 shadow-md' : 'border-0 bg-transparent outline-0'}`} 
                         />
                     </td>
                     <td className="px-6 py-4">
                         <input 
                             type="text" 
-                            disabled={editIndex != index} 
-                            value={editIndex != index ? item.address : editedData.address} 
+                            disabled={activeIndex != index} 
+                            value={activeIndex != index ? item.address : editedData.address} 
                             onChange={(event) => {
                                 setEditedData({
                                     address: event.target.value,
@@ -93,16 +97,16 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
                                     name: editedData.name
                                 })
                             }}
-                            className={`w-fit rounded-md text-center transition-all duration-300 ${editIndex == index? 'border-2 border-black bg-white/10 outline-1 outline-black scale-110 shadow-md' : 'border-0 bg-transparent outline-0'}`} 
+                            className={`w-fit rounded-md text-center transition-all duration-300 ${activeIndex == index? 'border-2 border-black bg-white/10 outline-1 outline-black scale-110 shadow-md' : 'border-0 bg-transparent outline-0'}`} 
                         />
                     </td>
                     <td className="px-6 py-4">
                         {item.totalAmount}
                     </td>
                     <td className="px-6 py-4 hover:cursor-pointer"> 
-                        {editIndex == index ? <Icons.tick onClick={() => editClient(item)} className="fill-green-500 h-5 w-5 mx-auto"/> : <Icons.edit 
+                        {activeIndex == index ? <Icons.tick onClick={() => editClient(item)} className="fill-green-500 h-5 w-5 mx-auto"/> : <Icons.edit 
                             onClick={() => {
-                                setEditIndex(index)
+                                setActiveIndex(index)
                                 setEditedData({
                                     name: item.name,
                                     address: item.address,
@@ -114,7 +118,12 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
 
                     </td>
                     <td onClick={() => deleteClient(item)} className="px-6 py-4 hover:cursor-pointer">
-                        <Icons.delete className="fill-black hover:fill-red-600 h-5 w-5 mx-auto"/> 
+                    {loading && activeIndex == index ? 
+                        <div className="animate-spin fill-black">
+                            <Icons.loader className="w-5 h-5 fill-white"/>
+                        </div> : 
+                        <Icons.delete className="fill-black hover:fill-red-600 h-5 w-5 mx-auto"/>
+                    } 
                     </td>
                     </tr>
                 ))}
