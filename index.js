@@ -9,9 +9,7 @@ const routes = require('./routes')
 
 const app = express();
 
-app.use(cors({
-    origin: "https://aad-billing-management.vercel.app/"
-}));
+app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
