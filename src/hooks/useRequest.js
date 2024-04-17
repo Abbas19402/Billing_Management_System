@@ -1,9 +1,8 @@
 import service from '../Services/service'
 
-const clientService = new service.client
-const invoiceService = new service.invoice
-
 const useRequest = () => {
+    const clientService = new service.client
+    const invoiceService = new service.invoice
     return {
         invoice: {
             get: () => invoiceService.getInvoices(),
