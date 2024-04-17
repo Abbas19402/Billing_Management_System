@@ -1,20 +1,21 @@
-import { createInvoices, deleteInvoices, editInvoices, getInvoices } from '../Services/Invoices/invoiceService'
+import service from '../Services/service'
 
-import { getClient, createClient, deleteClient, editClient } from '../Services/Clients/clientService'
+const clientService = new service.client
+const invoiceService = new service.invoice
 
 const useRequest = () => {
     return {
         invoice: {
-            get: () => getInvoices(),
-            create: invoiceData => createInvoices(invoiceData),
-            edit: editedInvoiceData => editInvoices(editedInvoiceData),
-            delete: invoice_id => deleteInvoices(invoice_id)
+            get: () => invoiceService.getInvoices(),
+            create: invoiceData => invoiceService.createInvoices(invoiceData),
+            edit: editedInvoiceData => invoiceService.editInvoices(editedInvoiceData),
+            delete: invoice_id => invoiceService.deleteInvoices(invoice_id)
         },
         client: {
-            get: () => getClient(),
-            create: newClient => createClient(newClient),
-            edit: editClientData => editClient(editClientData),
-            delete: clientId => deleteClient(clientId)
+            get: () => clientService.getClient(),
+            create: newClient => clientService.createClient(newClient),
+            edit: editClientData => clientService.editClient(editClientData),
+            delete: clientId => clientService.deleteClient(clientId)
         }
     }
 }
