@@ -74,118 +74,124 @@ const ReportFilter = ({ filterInvoices, setFilterInvoices, fetchInvoices }) => {
         
     },[]);
     return (
-        <div className='w-full min-h-20 bg-white  rounded-md flex flex-row justify-around items-end p-4 shadow-xl gap-x-5'>
-            <div className="w-fit h-full flex justify-start items-start">
-                <span className="text-xl tracking-tight uppercase">Filter</span>
+        <div className='flex flex-col gap-3 w-full'>
+            <div className="w-full h-full flex justify-between items-center">
+                    <div className="h-full text-2xl font-medium text-neutral-500 flex justify-center items-center uppercase">
+                        Filter
+                    </div>
+                    <button
+                        onClick={() => {
+                            Utility.export(filterInvoices, 'Invoice Report')
+                        }}
+                        className="flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    >
+                        Export to CSV
+                    </button>
+                </div>
+            <div className='w-full min-h-20 bg-white rounded-md flex flex-col justify-between items-start p-4 shadow-xl gap-x-5'>
+                
+                <form onSubmit={filter} className="w-full h-full flex justify-between items-end gap-x-4">
+                    <div className='w-36'>
+                        <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                            Client
+                        </label>
+                        <div className="mt-1 flex items-end gap-x-2">
+                            <select 
+                                name="client" 
+                                id="client"
+                                onChange={(event) => {
+                                    setActiveClient(event.target.value)
+                                }}
+                                className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border border-black rounded focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
+                                aria-placeholder='month'
+                            >
+                                <option key={"none"} value={"none"} className='text-start'>Select client</option>
+                                {
+                                    clients.map((item, index) => (
+                                        <option
+                                            key={index} 
+                                            value={item.email} 
+                                            className='text-start'
+                                            onClick={()=> {
+                                                if(!isClientFilterEnabled) setIsClientFilterEnabled(true)
+                                            }}
+                                        >{item.name}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className='w-52'>
+                        <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                            From
+                        </label>
+                        <div className="mt-1 flex items-end gap-x-2">
+                            <select 
+                                name="fromMonth" 
+                                id="fromMonth"
+                                className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
+                                aria-placeholder='month'
+                            >
+                                {
+                                    months.map((item, index) => (
+                                        <option key={index} value={item.value} className='text-start'>{item.name}</option>
+                                    ))
+                                }
+                            </select>
+                            <input
+                                id="fromYear"
+                                name="fromYear"
+                                type="number"
+                                required
+                                defaultValue={date.getFullYear()}
+                                className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
+                            />
+                        </div>
+                    </div>
+                    <span className="text-5xl font-thin">-</span>
+                    <div className='w-52'>
+                        <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                            To
+                        </label>
+                        <div className="mt-1 flex items-end gap-x-2">
+                            <select 
+                                name="toMonth" 
+                                id="toMonth"
+                                className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
+                                aria-placeholder='month'
+                            >
+                                {
+                                    months.map((item, index) => (
+                                        <option key={index} value={item.value} className='text-start'>{item.name}</option>
+                                    ))
+                                }
+                            </select>
+                            <input
+                                id="toYear"
+                                name="toYear"
+                                type="number"
+                                defaultValue={date.getFullYear()}
+                                required
+                                className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                        <button
+                            type="submit"
+                            className=" mt-3 flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                        >
+                            Filter
+                        </button>
+                        <button
+                            onClick={() => fetchOverall()}
+                            className="mt-3 flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                        >
+                            Reset
+                        </button>
+                    </div>
+                </form>
             </div>
-            <form onSubmit={filter} className="w-full h-full flex justify-end items-end gap-x-4">
-                <div className='w-36'>
-                    <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                        Client
-                    </label>
-                    <div className="mt-1 flex items-end gap-x-2">
-                        <select 
-                            name="client" 
-                            id="client"
-                            onChange={(event) => {
-                                setActiveClient(event.target.value)
-                            }}
-                            className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border border-black rounded focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
-                            aria-placeholder='month'
-                        >
-                            <option key={"none"} value={"none"} className='text-start'>Select client</option>
-                            {
-                                clients.map((item, index) => (
-                                    <option
-                                        key={index} 
-                                        value={item.email} 
-                                        className='text-start'
-                                        onClick={()=> {
-                                            if(!isClientFilterEnabled) setIsClientFilterEnabled(true)
-                                        }}
-                                    >{item.name}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className='w-52'>
-                    <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                        From
-                    </label>
-                    <div className="mt-1 flex items-end gap-x-2">
-                        <select 
-                            name="fromMonth" 
-                            id="fromMonth"
-                            className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
-                            aria-placeholder='month'
-                        >
-                            {
-                                months.map((item, index) => (
-                                    <option key={index} value={item.value} className='text-start'>{item.name}</option>
-                                ))
-                            }
-                        </select>
-                        <input
-                            id="fromYear"
-                            name="fromYear"
-                            type="number"
-                            required
-                            defaultValue={date.getFullYear()}
-                            className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
-                        />
-                    </div>
-                </div>
-                <span className="text-5xl font-thin">-</span>
-                <div className='w-52'>
-                    <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                        To
-                    </label>
-                    <div className="mt-1 flex items-end gap-x-2">
-                        <select 
-                            name="toMonth" 
-                            id="toMonth"
-                            className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
-                            aria-placeholder='month'
-                        >
-                            {
-                                months.map((item, index) => (
-                                    <option key={index} value={item.value} className='text-start'>{item.name}</option>
-                                ))
-                            }
-                        </select>
-                        <input
-                            id="toYear"
-                            name="toYear"
-                            type="number"
-                            defaultValue={date.getFullYear()}
-                            required
-                            className="block w-full py-1.5 text-gray-900 shadow-sm bg-white border-b-2 border-b-black focus:outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6 px-1.5 font-medium text-center"
-                        />
-                    </div>
-                </div>
-
-                <button
-                    type="submit"
-                    className=" mt-3 flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                >
-                    Filter
-                </button>
-                <button
-                    onClick={() => fetchOverall()}
-                    className="mt-3 flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                >
-                    Reset
-                </button>
-                <button
-                    onClick={() => {
-                        Utility.export(filterInvoices, 'Invoice Report')
-                    }}
-                    className="mt-3 flex justify-center rounded bg-black px-5 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                >
-                    Export
-                </button>
-            </form>
         </div>
     )
 }

@@ -36,7 +36,7 @@ const ClientTable = ({ setClients, clients, updateComponent }) => {
     }
 
     return (
-        <table className="w-full text-sm text-left text-gray-500">
+        <table className="w-full text-sm text-left text-gray-500 rounded-lg overflow-hidden mb-5 shadow-lg">
             <thead className="text-xs text-gray-700 uppercase bg-gray-200 ">
                 <tr className='text-center'>
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">S. No.</th>

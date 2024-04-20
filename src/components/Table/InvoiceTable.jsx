@@ -48,7 +48,7 @@ const InvoiceTable = ({
     }
 
     return (
-        <table className="w-full min-h-fit text-sm text-left text-gray-500">
+        <table className="w-full min-h-fit text-sm text-left text-gray-500 rounded-lg overflow-hidden mb-5 shadow-lg">
             <thead className="text-xs text-gray-700 uppercase bg-gray-200 rounded-lg overflow-hidden">
                 <tr className='text-center'>
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">S. No.</th>

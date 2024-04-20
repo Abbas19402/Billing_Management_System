@@ -15,7 +15,6 @@ const DashboardPage = ({ data }) => {
         const allInvoices = await request.invoice.get();
         const allClients = await request.client.get();
 
-        console.log(allClients)
         const invoice = allInvoices.filter(item => {
             return {
                 dataPoint: parseInt(item.amount)
@@ -38,7 +37,6 @@ const DashboardPage = ({ data }) => {
           clientData[clientEmail] = clientData[clientEmail] || { name: clientName, total: 0 };
           clientData[clientEmail].total += invoice.amount;
         });
-        console.log(clientData)
         return Object.values(clientData);
     }
 
