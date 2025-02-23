@@ -1,18 +1,28 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> server/main
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+<<<<<<< HEAD
 .yarn/install-state.gz
+=======
+>>>>>>> server/main
 
 # testing
 /coverage
 
+<<<<<<< HEAD
 # next.js
 /.next/
 /out/
 
+=======
+>>>>>>> server/main
 # production
 /build
 
@@ -24,13 +34,20 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
+=======
+.pnpm-debug.log*
+>>>>>>> server/main
 
 # local env files
 .env*.local
 
 # vercel
 .vercel
+<<<<<<< HEAD
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+=======
+>>>>>>> server/main
