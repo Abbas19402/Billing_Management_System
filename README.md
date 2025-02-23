@@ -40,8 +40,8 @@ Ensure you have the following installed:
 
 1. **Clone the repository**
 ```bash
-git clone <your-monorepo-url>
-cd monorepo
+git clone https://github.com/Abbas19402/Billing_Management_System.git
+cd Billing_Management_System
 ```
 
 2. **Install dependencies**
@@ -54,7 +54,7 @@ npm install
 #### Start the **Backend** (Node.js)
 ```bash
 cd apps/server
-npm run dev
+npm run start
 ```
 > Runs on `http://localhost:5000`
 
@@ -64,24 +64,6 @@ cd apps/client
 npm run dev
 ```
 > Runs on `http://localhost:3000`
-
----
-
-## 📊 Environment Configuration
-
-Ensure you create **.env** files for both the **client** and **server** with the required environment variables.
-
-### `apps/server/.env`
-```env
-PORT=5000
-DATABASE_URL=<your-database-url>
-JWT_SECRET=<your-secret-key>
-```
-
-### `apps/client/.env`
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
 
 ---
 
@@ -102,18 +84,6 @@ npm run build
 # Run tests
 npm test
 ```
-
----
-
-## 📜 API Endpoints
-
-| Method | Endpoint            | Description                  |
-|--------|---------------------|------------------------------|
-| GET    | `/api/clients`      | Fetch all clients            |
-| POST   | `/api/clients`      | Create a new client          |
-| GET    | `/api/invoices`     | Fetch all invoices           |
-| POST   | `/api/invoices`     | Create a new invoice         |
-| GET    | `/api/reports`      | Generate and export reports  |
 
 ---
 
@@ -150,8 +120,8 @@ This project is licensed under the **MIT License**.
 
 For questions or support, reach out via:
 
-- **Email:** yourname@example.com
-- **GitHub Issues:** [Open an issue](https://github.com/your-username/your-repo/issues)
+- **Email:** abbasali.dalal07@gmail.com
+- **GitHub Issues:** [Open an issue](https://github.com/Abbas19402/Billing_Management_System/issues)
 
 Happy coding! 💻
 
